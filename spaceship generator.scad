@@ -2,7 +2,7 @@
 p = number of pylons
 r = main body radius
 l = length
-a = wing/pylon sweep
+a = wing/pylon sweep 0-40 deg
 */
 module radialType(p, r, l, a) {
 	//body
@@ -26,6 +26,7 @@ module engine(r) {
 	cylinder(20, r, r, true);
 }
 
+deltaType(70, 25, .75, .65, 5);
 /*
 s= span
 t= thickness
@@ -42,37 +43,34 @@ module deltaType(s, t, a, sw, e) {
 		translate([0, 0, l*(sw-.5)]) cube([s, 2, 2], true);
 	}
 	//engines
-	r = s/(2*e+3);
+	r = s/(2*e);
+	if (floor(e/2) != ceil(e/2)) translate([0, 0, -11+l/2]) engine(r);
 	for (i=[0:1]) {
-		for (k=[1:2:e/2+1]) {
-			rotate([0, 0, i*(180)]) translate([k*s/(2*e+1), 0, 5*(3-k)]) engine(r);
+		for (k=[1:1:(e/2)]) {
+			rotate([0, 0, i*(180)]) 
+				translate([k*s/(1.05*e), 0, (-5+l/2)-(k/(e+1))*2.1*(1-sw)*l]) 
+					engine((k+1)*r/(2*k));
 		}
 	}
 }
-for (i=[0.6:0.2:3]) {
-	translate([i*400, 0, 0]) deltaType(60, 10, i, .5, 4);
-}
-//translate([0, 0, 30]) deltaType(60, 10, 2, .5, 4);
-//translate([100, 0, 0]) radialType(3, 10, 60, 10);
 
-//radialTypeDisplay();
-
+module displayShips(s, sp) {
 // display code
-
-module radialTypeDisplay() {
-for (i=[0:5:30]) {
-	translate([i*20, 0, 0]) radialType(5, 20, 40, i);
+for (i=[0.9:0.16:2]) {
+	for (k=[0.25:0.15:0.75]) {
+		for (j=[1:1:7]) {
+			translate([sp*(i-0.9)*10*s, (sp*j)*s, -sp*(0.25-k)*10*s]) deltaType(s, s/4, i, k, j);
+		}
+	}
 }
 
-for (i=[2:8]) {
-	translate([(i-2)*100, 0, 100]) radialType(i, 20, 40, 15);
+for (i=[5:5:35]) {
+	for (k=[10:5:25]) {
+		for (j=[2:7]) {
+			translate([sp*(i-5)*30, -sp*(j-1)*150, -sp*(10-k)*30]) radialType(j, k, s, i);
+		}
+	}
+}
 }
 
-for (i=[10:5:40]) {
-	translate([(i-10)*20, 0, 200]) radialType(3, i, 40, 15);
-}
-
-for (i=[10:10:70]) {
-	translate([(i-10)*10, 0, 300]) radialType(3, 20, i, 15);
-}
-}
+//displayShips(100, 2);
