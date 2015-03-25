@@ -26,7 +26,7 @@ module engine(r) {
 	cylinder(20, r, r, true);
 }
 
-deltaType(70, 25, .75, .65, 5);
+deltaType(70, 25, .75, .65, 7);
 /*
 s= span
 t= thickness
@@ -44,7 +44,7 @@ module deltaType(s, t, a, sw, e) {
 	}
 	//engines
 	r = s/(2*e);
-	if (floor(e/2) != ceil(e/2)) translate([0, 0, -11+l/2]) engine(r);
+	if (floor(e/2) != ceil(e/2)) translate([0, 0, -8+l/2]) engine(r);
 	for (i=[0:1]) {
 		for (k=[1:1:(e/2)]) {
 			rotate([0, 0, i*(180)]) 
@@ -73,4 +73,4 @@ for (i=[5:5:35]) {
 }
 }
 
-//displayShips(100, 2);
+//sdisplayShips(100, 2);
